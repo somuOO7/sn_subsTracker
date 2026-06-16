@@ -1,15 +1,20 @@
-import {
-  Text,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import Dashboard from './src/screens/Dashboard';
+import Details from './src/screens/Details';
+import { createStaticNavigation } from '@react-navigation/native';
+
+const RootStack = createNativeStackNavigator({
+  screens: {
+    Dashboard: Dashboard,
+    Details: Details,
+  },
+});
+
+const Navigation = createStaticNavigation(RootStack);
 
 function App() {
-
-  return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
-      <Text>Hello, World!</Text>
-    </SafeAreaView>
-  );
+  return <Navigation />;
 }
 
 export default App;

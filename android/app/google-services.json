@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "618746093565",
+    "project_id": "sn-substracker",
+    "storage_bucket": "sn-substracker.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:618746093565:android:c916e4daaf6db8e73cc394",
+        "android_client_info": {
+          "package_name": "com.sn_substracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2H1FmJE02dOJvCe_vaFoXhKTArCFnggY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
