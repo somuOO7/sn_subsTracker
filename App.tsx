@@ -5,6 +5,7 @@ import {
   StaticParamList,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Keyboard, TouchableWithoutFeedback, View } from 'react-native';
 import Dashboard from './src/screens/Dashboard';
 import Details from './src/screens/Details';
 import Login from './src/screens/Login';
@@ -40,7 +41,13 @@ declare global {
 }
 
 function App() {
-  return <Navigation />;
+  return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={{ flex: 1 }}>
+        <Navigation />
+      </View>
+    </TouchableWithoutFeedback>
+  );
 }
 
 export default App;

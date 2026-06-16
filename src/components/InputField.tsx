@@ -4,6 +4,7 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 interface InputFieldProps {
   label: string;
   placeholder: string;
+  onChangeText: (text: string) => void;
 }
 
 const InputField = (props: InputFieldProps) => {
@@ -14,6 +15,7 @@ const InputField = (props: InputFieldProps) => {
         style={styles.textFieldContainer}
         placeholderTextColor="gray"
         placeholder={props.placeholder}
+        onChangeText={props.onChangeText}
       />
     </View>
   );
