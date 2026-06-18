@@ -57,6 +57,7 @@ const Login = () => {
         <InputField
           label="Email address"
           placeholder="Enter your email address..."
+          inputType="email-address"
           onChangeText={text => handleTextChange('email', text)}
         />
         <InputField

@@ -1,5 +1,7 @@
+import BottomSheetDetails from './BottomSheetDetails';
 import Button from './Button';
 import Card from './Card';
+import DashboardSummary from './DashboardSummary';
 import InputField from './InputField';
 
-export { Button, Card, InputField };
+export { BottomSheetDetails, Button, DashboardSummary, Card, InputField };
