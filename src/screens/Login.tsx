@@ -6,7 +6,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Card, InputField } from '../components';
 import { Colors } from '../constants';
-
+import { useUser } from '../store';
 import { getErrorText } from '../utils/auth';
 
 const Login = () => {
@@ -15,6 +15,8 @@ const Login = () => {
   const [formValue, setFormValue] = useState({ email: '', password: '' });
   const [isLoginBtnDisabled, setIsLoginBtnDisabled] = useState(true);
   const [error, setError] = useState('');
+
+  const setUserId = useUser(state => state.setUserId);
 
   useEffect(() => {
     if (formValue.email !== '' && formValue.password !== '')
@@ -28,6 +30,7 @@ const Login = () => {
       .signInWithEmailAndPassword(formValue.email, formValue.password)
       .then(userCreds => {
         console.log(userCreds);
+        setUserId(userCreds.user.uid);
         navigation.navigate('MainStack');
       })
       .catch(err => {

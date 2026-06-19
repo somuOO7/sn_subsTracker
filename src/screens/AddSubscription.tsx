@@ -3,9 +3,14 @@ import { StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Card, InputField } from '../components';
 import { getSubscriptionTypes } from '../services/subscriptionTypes';
+import { addSubscriptionDetail } from '../services/subscriptionDetails';
+import { billingCycles } from '../constants';
+import { useUser } from '../store';
 
 const AddSubscription = () => {
   const [subsType, setSubsType] = useState<any[]>([]);
+
+  const userId = useUser(state => state.userId);
 
   const fetchTypes = async () => {
     const data = await getSubscriptionTypes();
@@ -34,7 +39,19 @@ const AddSubscription = () => {
         <InputField label="Cost per billing cycle" placeholder="Enter amount" />
       </Card>
 
-      <Button title="Save Subscription" isDisabled={false} onPress={() => {}} />
+      <Button
+        title="Save Subscription"
+        isDisabled={false}
+        onPress={() => {
+          addSubscriptionDetail(
+            userId,
+            'NETFLIX',
+            199,
+            billingCycles.monthly,
+            '2026-06-15',
+          );
+        }}
+      />
     </SafeAreaView>
   );
 };

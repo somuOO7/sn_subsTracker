@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { Colors } from '../constants';
 
 interface InputFieldProps {
   label: string;
@@ -25,7 +26,7 @@ const InputField = (props: InputFieldProps) => {
   const handleDropdownItemSelected = (selectedItem: {
     id: string;
     label: string;
-    icon: string;
+    icon?: string;
   }) => {
     setDropdownLabel(selectedItem.label);
     setIsDropdownOpen(false);
@@ -52,22 +53,24 @@ const InputField = (props: InputFieldProps) => {
           </TouchableOpacity>
           {isDropdownOpen && (
             <View style={styles.dropdownContainer}>
-              {props.dropdownData?.map(item => {
-                return (
-                  <Pressable
-                    key={item.id}
-                    style={styles.dropdownItemContainer}
-                    onPress={() => handleDropdownItemSelected(item)}
-                  >
-                    <Image
-                      source={{ uri: item.icon }}
-                      style={{ width: 24, height: 24 }}
-                      resizeMode="contain"
-                    />
-                    <Text>{item.label}</Text>
-                  </Pressable>
-                );
-              })}
+              {props.dropdownData?.map(
+                (item: { id: string; icon?: string; label: string }) => {
+                  return (
+                    <Pressable
+                      key={item.id}
+                      style={styles.dropdownItemContainer}
+                      onPress={() => handleDropdownItemSelected(item)}
+                    >
+                      <Image
+                        source={{ uri: item.icon }}
+                        style={{ width: 24, height: 24 }}
+                        resizeMode="contain"
+                      />
+                      <Text>{item.label}</Text>
+                    </Pressable>
+                  );
+                },
+              )}
             </View>
           )}
         </>
@@ -85,13 +88,22 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginTop: 8,
   },
-  dropdownContainer: {},
+  dropdownContainer: {
+    position: 'absolute',
+    top: 75,
+    left: 0,
+    right: 0,
+    zIndex: 1000,
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
   dropdownItemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
     paddingHorizontal: 16,
     paddingVertical: 8,
+    backgroundColor: Colors.backgroundColor,
   },
 });
 

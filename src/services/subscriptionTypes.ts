@@ -1,8 +1,9 @@
 import database from '@react-native-firebase/database';
+import { databaseRefs } from '../constants';
 
 export const getSubscriptionTypes = () => {
   return database()
-    .ref('/subscription_types')
+    .ref(databaseRefs.subscription_type)
     .once('value')
     .then(snapshot => {
       const data = snapshot.val();
