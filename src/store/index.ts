@@ -1,3 +1,4 @@
+import useLoader from './useLoader';
 import useUser from './useUser';
 
-export { useUser };
+export { useLoader, useUser };

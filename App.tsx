@@ -7,11 +7,12 @@ import {
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { CircleAlert, LayoutGrid, List, PlusCircle } from 'lucide-react-native';
 import { Keyboard, Text, TouchableWithoutFeedback, View } from 'react-native';
+import AddSubscription from './src/screens/AddSubscription';
 import Dashboard from './src/screens/Dashboard';
 import Details from './src/screens/Details';
 import Login from './src/screens/Login';
+import { Loader } from './src/components';
 import { Colors } from './src/constants';
-import AddSubscription from './src/screens/AddSubscription';
 
 const MainStack = createBottomTabNavigator({
   screens: {
@@ -113,6 +114,7 @@ function App() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={{ flex: 1 }}>
         <Navigation />
+        <Loader />
       </View>
     </TouchableWithoutFeedback>
   );

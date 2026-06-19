@@ -1,6 +1,7 @@
 import database from '@react-native-firebase/database';
 import uuid from 'react-native-uuid';
 import { billingCycles, databaseRefs } from '../constants';
+import { useLoader } from '../store';
 
 export const addSubscriptionDetail = (
   userId: string,
@@ -10,7 +11,11 @@ export const addSubscriptionDetail = (
   startDate: string,
   endDate?: string,
 ) => {
+  const { showLoader, hideLoader } = useLoader.getState();
+
+  showLoader();
   const id = uuid.v4();
+
   if (!endDate) {
     const start = new Date(startDate);
     let daysToAdd = 0;
@@ -35,6 +40,12 @@ export const addSubscriptionDetail = (
   database()
     .ref(databaseRefs.subscription_detail + `/${id}`)
     .set({ userId, productId, amount, billingCycle, startDate, endDate })
-    .then(res => console.log('Data set:', res))
-    .catch(err => console.log('Error while setting data', err));
+    .then(res => {
+      console.log('Data set:', res);
+      hideLoader();
+    })
+    .catch(err => {
+      console.log('Error while setting data', err);
+      hideLoader();
+    });
 };
