@@ -37,7 +37,7 @@ const Login = () => {
         navigation.navigate('MainStack');
       })
       .catch(err => {
-        console.log(err);
+        hideLoader();
         setError(getErrorText(err.code));
       });
   };

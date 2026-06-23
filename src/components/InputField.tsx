@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Image,
   KeyboardType,
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -10,11 +11,12 @@ import {
   View,
 } from 'react-native';
 import { Colors } from '../constants';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 interface InputFieldProps {
   label: string;
   placeholder: string;
-  inputType?: KeyboardType | 'dropdown';
+  inputType?: KeyboardType | 'dropdown' | 'datepicker';
   dropdownData?: { id: string; label: string; icon?: string }[];
   onChangeText?: (text: string) => void;
 }
@@ -22,6 +24,7 @@ interface InputFieldProps {
 const InputField = (props: InputFieldProps) => {
   const [dropdownLabel, setDropdownLabel] = useState(props.placeholder);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [dateValue, setDateValue] = useState<Date | null>(null);
 
   const handleDropdownItemSelected = (selectedItem: {
     id: string;
@@ -30,12 +33,13 @@ const InputField = (props: InputFieldProps) => {
   }) => {
     setDropdownLabel(selectedItem.label);
     setIsDropdownOpen(false);
+    props.onChangeText && props.onChangeText(selectedItem.id);
   };
 
   return (
     <View>
       <Text style={styles.labelText}>{props.label}</Text>
-      {props.inputType !== 'dropdown' ? (
+      {props.inputType !== 'dropdown' && props.inputType !== 'datepicker' ? (
         <TextInput
           style={styles.textFieldContainer}
           placeholderTextColor="gray"
@@ -45,13 +49,26 @@ const InputField = (props: InputFieldProps) => {
         />
       ) : (
         <>
-          <TouchableOpacity
-            style={styles.textFieldContainer}
-            onPress={() => setIsDropdownOpen(!isDropdownOpen)}
-          >
-            <Text>{dropdownLabel}</Text>
-          </TouchableOpacity>
-          {isDropdownOpen && (
+          {props.inputType === 'datepicker' && Platform.OS === 'ios' ? (
+            <DateTimePicker
+              value={dateValue || new Date()}
+              onValueChange={(_, date) => {
+                if (date) {
+                  const selectedDate = date.toISOString().split('T')[0];
+                  setDateValue(new Date(selectedDate));
+                  props.onChangeText && props.onChangeText(selectedDate);
+                }
+              }}
+            />
+          ) : (
+            <TouchableOpacity
+              style={styles.textFieldContainer}
+              onPress={() => setIsDropdownOpen(!isDropdownOpen)}
+            >
+              <Text style={styles.placeholderText}>{dropdownLabel}</Text>
+            </TouchableOpacity>
+          )}
+          {props.inputType === 'dropdown' && isDropdownOpen && (
             <View style={styles.dropdownContainer}>
               {props.dropdownData?.map(
                 (item: { id: string; icon?: string; label: string }) => {
@@ -73,6 +90,22 @@ const InputField = (props: InputFieldProps) => {
               )}
             </View>
           )}
+          {props.inputType === 'datepicker' &&
+            Platform.OS === 'android' &&
+            isDropdownOpen && (
+              <DateTimePicker
+                value={dateValue || new Date()}
+                onValueChange={(_, date) => {
+                  if (date) {
+                    const selectedDate = date.toISOString().split('T')[0];
+                    setDateValue(new Date(selectedDate));
+                    props.onChangeText && props.onChangeText(selectedDate);
+                    setDropdownLabel(selectedDate);
+                    setIsDropdownOpen(false);
+                  }
+                }}
+              />
+            )}
         </>
       )}
     </View>
@@ -88,6 +121,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginTop: 8,
   },
+  placeholderText: { color: 'gray' },
   dropdownContainer: {
     position: 'absolute',
     top: 75,

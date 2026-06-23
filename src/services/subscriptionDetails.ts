@@ -1,7 +1,8 @@
 import database from '@react-native-firebase/database';
 import uuid from 'react-native-uuid';
 import { billingCycles, databaseRefs } from '../constants';
-import { useLoader } from '../store';
+import { useLoader, useSubscription, useUser } from '../store';
+import { SubscriptionItem } from '../store/useSubscription';
 
 export const addSubscriptionDetail = (
   userId: string,
@@ -46,6 +47,42 @@ export const addSubscriptionDetail = (
     })
     .catch(err => {
       console.log('Error while setting data', err);
+      hideLoader();
+    });
+};
+
+export const fetchSubscriptionDetail = () => {
+  const { showLoader, hideLoader } = useLoader.getState();
+  const { setSubscription } = useSubscription.getState();
+  const { userId } = useUser.getState();
+
+  showLoader();
+
+  database()
+    .ref(databaseRefs.subscription_detail)
+    .once('value')
+    .then(snapshot => {
+      let subscriptionData: SubscriptionItem[] = [];
+      const data = snapshot.val();
+      const keys = Object.keys(data);
+
+      keys.forEach(key => {
+        if (data[key].userId === userId)
+          subscriptionData.push({
+            id: key,
+            productId: data[key].productId,
+            amount: data[key].amount,
+            billingCycle: data[key].billingCycle,
+            startDate: data[key].startDate,
+            endDate: data[key].endDate,
+          });
+      });
+
+      setSubscription(subscriptionData);
+      hideLoader();
+    })
+    .catch(err => {
+      console.log('Error while fetching data', err);
       hideLoader();
     });
 };
