@@ -33,12 +33,17 @@ const Dashboard = () => {
       />
 
       <BottomSheetDetails
-        data={subscriptionList.map(item => ({
-          title: item.productId,
-          amount: item.amount.toString(),
-          billing_cycle: item.billingCycle,
-          expiry_on: item.endDate,
-        }))}
+        data={subscriptionList
+          .sort(
+            (a, b) =>
+              new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
+          )
+          .map(item => ({
+            title: item.productId,
+            amount: item.amount.toString(),
+            billing_cycle: item.billingCycle,
+            expiry_on: item.endDate,
+          }))}
       />
     </SafeAreaView>
   );
