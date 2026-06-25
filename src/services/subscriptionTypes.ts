@@ -1,4 +1,4 @@
-import database from '@react-native-firebase/database';
+import { getDatabase, ref, get } from '@react-native-firebase/database';
 import { databaseRefs } from '../constants';
 import { useLoader } from '../store';
 
@@ -6,12 +6,11 @@ export const getSubscriptionTypes = () => {
   const { showLoader, hideLoader } = useLoader.getState();
   showLoader();
 
-  return database()
-    .ref(databaseRefs.subscription_type)
-    .once('value')
+  const db = getDatabase();
+  return get(ref(db, databaseRefs.subscription_type))
     .then(snapshot => {
       const data = snapshot.val();
-      const keys = Object.keys(data);
+      const keys = data ? Object.keys(data) : [];
       hideLoader();
       return keys.map((key: string) => ({
         id: key,

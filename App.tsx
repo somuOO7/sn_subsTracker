@@ -6,7 +6,7 @@ import {
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { CircleAlert, LayoutGrid, List, PlusCircle } from 'lucide-react-native';
-import { Keyboard, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Text, View } from 'react-native';
 import AddSubscription from './src/screens/AddSubscription';
 import Dashboard from './src/screens/Dashboard';
 import Details from './src/screens/Details';
@@ -111,12 +111,10 @@ declare global {
 
 function App() {
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={{ flex: 1 }}>
-        <Navigation />
-        <Loader />
-      </View>
-    </TouchableWithoutFeedback>
+    <View style={{ flex: 1 }}>
+      <Navigation />
+      <Loader />
+    </View>
   );
 }
 

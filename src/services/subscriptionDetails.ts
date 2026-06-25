@@ -1,4 +1,4 @@
-import database from '@react-native-firebase/database';
+import { getDatabase, ref, set, get } from '@react-native-firebase/database';
 import uuid from 'react-native-uuid';
 import { billingCycles, databaseRefs } from '../constants';
 import { useLoader, useSubscription, useUser } from '../store';
@@ -38,9 +38,15 @@ export const addSubscriptionDetail = (
     endDate = start.toISOString().split('T')[0];
   }
 
-  database()
-    .ref(databaseRefs.subscription_detail + `/${id}`)
-    .set({ userId, productId, amount, billingCycle, startDate, endDate })
+  const db = getDatabase();
+  set(ref(db, `${databaseRefs.subscription_detail}/${id}`), {
+    userId,
+    productId,
+    amount,
+    billingCycle,
+    startDate,
+    endDate,
+  })
     .then(res => {
       console.log('Data set:', res);
       hideLoader();
@@ -58,16 +64,23 @@ export const fetchSubscriptionDetail = () => {
 
   showLoader();
 
-  database()
-    .ref(databaseRefs.subscription_detail)
-    .once('value')
+  const db = getDatabase();
+  get(ref(db, databaseRefs.subscription_detail))
     .then(snapshot => {
       let subscriptionData: SubscriptionItem[] = [];
       const data = snapshot.val();
-      const keys = Object.keys(data);
+      const keys = data ? Object.keys(data) : [];
 
       keys.forEach(key => {
-        if (data[key].userId === userId)
+        console.log(
+          'SOMU data[key].userId === userId',
+          data[key].userId === userId,
+          'userId: ',
+          userId,
+          'data[key].userId:',
+          data[key].userId,
+        );
+        if (data[key].userId === userId) {
           subscriptionData.push({
             id: key,
             productId: data[key].productId,
@@ -76,6 +89,7 @@ export const fetchSubscriptionDetail = () => {
             startDate: data[key].startDate,
             endDate: data[key].endDate,
           });
+        }
       });
 
       setSubscription(subscriptionData);
@@ -86,3 +100,4 @@ export const fetchSubscriptionDetail = () => {
       hideLoader();
     });
 };
+

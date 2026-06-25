@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Card, InputField } from '../components';
 import { getSubscriptionTypes } from '../services/subscriptionTypes';
@@ -94,59 +94,61 @@ const AddSubscription = () => {
   }, [formData]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.screenTitle}>Add Subscription</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.screenTitle}>Add Subscription</Text>
 
-      <Card>
-        <InputField
-          label="Service Name"
-          placeholder="Select a service"
-          inputType="dropdown"
-          dropdownData={subsType}
-          onChangeText={val => handleModifyFormData('serviceId', val)}
-        />
-      </Card>
+        <Card>
+          <InputField
+            label="Service Name"
+            placeholder="Select a service"
+            inputType="dropdown"
+            dropdownData={subsType}
+            onChangeText={val => handleModifyFormData('serviceId', val)}
+          />
+        </Card>
 
-      <Card>
-        <InputField
-          label="Billing cycle"
-          placeholder="Select a billing cycle"
-          inputType="dropdown"
-          dropdownData={Object.values(billingCycles).map(item => ({
-            id: item,
-            label: item.charAt(0).toUpperCase() + item.slice(1),
-          }))}
-          onChangeText={val => handleModifyFormData('billingCycle', val)}
-        />
-        <InputField
-          label="Cost per billing cycle"
-          placeholder="Enter amount"
-          inputType="numeric"
-          onChangeText={val => handleModifyFormData('amount', val)}
-        />
-      </Card>
+        <Card>
+          <InputField
+            label="Billing cycle"
+            placeholder="Select a billing cycle"
+            inputType="dropdown"
+            dropdownData={Object.values(billingCycles).map(item => ({
+              id: item,
+              label: item.charAt(0).toUpperCase() + item.slice(1),
+            }))}
+            onChangeText={val => handleModifyFormData('billingCycle', val)}
+          />
+          <InputField
+            label="Cost per billing cycle"
+            placeholder="Enter amount"
+            inputType="numeric"
+            onChangeText={val => handleModifyFormData('amount', val)}
+          />
+        </Card>
 
-      <Card>
-        <InputField
-          label="Start date"
-          placeholder="Select a start date"
-          inputType="datepicker"
-          onChangeText={val => handleModifyFormData('startDate', val)}
-        />
-        <InputField
-          label="End date (Optional)"
-          placeholder="Select an end date"
-          inputType="datepicker"
-          onChangeText={val => handleModifyFormData('endDate', val)}
-        />
-      </Card>
+        <Card>
+          <InputField
+            label="Start date"
+            placeholder="Select a start date"
+            inputType="datepicker"
+            onChangeText={val => handleModifyFormData('startDate', val)}
+          />
+          <InputField
+            label="End date (Optional)"
+            placeholder="Select an end date"
+            inputType="datepicker"
+            onChangeText={val => handleModifyFormData('endDate', val)}
+          />
+        </Card>
 
-      <Button
-        title="Save Subscription"
-        isDisabled={isSubmitBtnDisabled}
-        onPress={handleAddSubs}
-      />
-    </SafeAreaView>
+        <Button
+          title="Save Subscription"
+          isDisabled={isSubmitBtnDisabled}
+          onPress={handleAddSubs}
+        />
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 

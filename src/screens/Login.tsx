@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import auth from '@react-native-firebase/auth';
+import { getAuth, signInWithEmailAndPassword } from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import { ShieldX } from 'lucide-react-native';
-import { StyleSheet, Text, View } from 'react-native';
+import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Card, InputField } from '../components';
 import { Colors } from '../constants';
@@ -28,8 +28,8 @@ const Login = () => {
   const handleLogin = () => {
     showLoader();
     setIsLoginBtnDisabled(true);
-    auth()
-      .signInWithEmailAndPassword(formValue.email, formValue.password)
+    const authInstance = getAuth();
+    signInWithEmailAndPassword(authInstance, formValue.email, formValue.password)
       .then(userCreds => {
         console.log(userCreds);
         setUserId(userCreds.user.uid);
@@ -51,40 +51,42 @@ const Login = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <Text style={styles.titleText}>Welcome to your Subscriptions!</Text>
-        <Text style={styles.subtitleText}>
-          Login to seamlessly track your subscriptions
-        </Text>
-      </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <SafeAreaView style={styles.container}>
+        <View>
+          <Text style={styles.titleText}>Welcome to your Subscriptions!</Text>
+          <Text style={styles.subtitleText}>
+            Login to seamlessly track your subscriptions
+          </Text>
+        </View>
 
-      <Card>
-        <InputField
-          label="Email address"
-          placeholder="Enter your email address..."
-          inputType="email-address"
-          onChangeText={text => handleTextChange('email', text)}
-        />
-        <InputField
-          label="Password"
-          placeholder="Enter your password..."
-          onChangeText={text => handleTextChange('password', text)}
-        />
-        {error !== '' && (
-          <View style={styles.errorContainer}>
-            <ShieldX color="red" />
-            <Text style={styles.errorText}>{error}</Text>
-          </View>
-        )}
-      </Card>
+        <Card>
+          <InputField
+            label="Email address"
+            placeholder="Enter your email address..."
+            inputType="email-address"
+            onChangeText={text => handleTextChange('email', text)}
+          />
+          <InputField
+            label="Password"
+            placeholder="Enter your password..."
+            onChangeText={text => handleTextChange('password', text)}
+          />
+          {error !== '' && (
+            <View style={styles.errorContainer}>
+              <ShieldX color="red" />
+              <Text style={styles.errorText}>{error}</Text>
+            </View>
+          )}
+        </Card>
 
-      <Button
-        title="Login"
-        onPress={handleLogin}
-        isDisabled={isLoginBtnDisabled}
-      />
-    </SafeAreaView>
+        <Button
+          title="Login"
+          onPress={handleLogin}
+          isDisabled={isLoginBtnDisabled}
+        />
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 

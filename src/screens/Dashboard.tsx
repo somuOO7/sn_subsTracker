@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Bell } from 'lucide-react-native';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BottomSheetDetails, DashboardSummary } from '../components';
 import { Colors } from '../constants';
+import { fetchSubscriptionDetail } from '../services/subscriptionDetails';
+import { useSubscription } from '../store';
 
 const Dashboard = () => {
+  const { subscriptionList } = useSubscription();
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchSubscriptionDetail();
+    }, []),
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
@@ -22,14 +33,12 @@ const Dashboard = () => {
       />
 
       <BottomSheetDetails
-        data={[
-          {
-            title: 'Netflix',
-            amount: '349',
-            billing_cycle: 'Monthly',
-            expiry_on: '2026-06-30',
-          },
-        ]}
+        data={subscriptionList.map(item => ({
+          title: item.productId,
+          amount: item.amount.toString(),
+          billing_cycle: item.billingCycle,
+          expiry_on: item.endDate,
+        }))}
       />
     </SafeAreaView>
   );
