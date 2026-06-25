@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "pod-install": "cd ios && rm -rf Pods Podfile.lock build && pod install && cd .."
+    "pod-install": "cd ios && rm -rf Pods Podfile.lock build && pod install && cd ..",
+    "android-clean": "cd android && ./gradlew clean && cd .."
   },
   "dependencies": {
     "@react-native-community/datetimepicker": "^9.1.0",
